@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: br.com.cleanprosolutions.auth.service.impl.AuthServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.920 s <<< FAILURE! -- in br.com.cleanprosolutions.auth.service.impl.AuthServiceImplTest
+br.com.cleanprosolutions.auth.service.impl.AuthServiceImplTest.shouldReturnValidResponseWhenTokenIsValid -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "io.jsonwebtoken.Claims.get(String, java.lang.Class)" because "claims" is null
+	at br.com.cleanprosolutions.auth.service.impl.AuthServiceImpl.validate(AuthServiceImpl.java:143)
+	at br.com.cleanprosolutions.auth.service.impl.AuthServiceImplTest.shouldReturnValidResponseWhenTokenIsValid(AuthServiceImplTest.java:211)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

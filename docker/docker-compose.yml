@@ -1,0 +1,73 @@
+version: '3.8'
+
+# Docker Compose para execução ISOLADA do clean-pro-solutions-auth-service
+# Para rodar o ecossistema completo, use o docker-compose.yml na raiz do projeto.
+
+services:
+
+  auth-service:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: clean-pro-auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - MONGO_URI=mongodb://auth-mongodb:27017/auth_db
+      - RABBITMQ_HOST=auth-rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - EUREKA_ENABLED=false
+      - JWT_SECRET=${JWT_SECRET:-defaultSecretKeyForDevelopmentOnlyMustBeAtLeast256Bits}
+      - JWT_EXPIRATION=${JWT_EXPIRATION:-900000}
+      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION:-604800000}
+      - SERVER_PORT=8081
+    depends_on:
+      auth-mongodb:
+        condition: service_healthy
+      auth-rabbitmq:
+        condition: service_healthy
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+  auth-mongodb:
+    image: mongo:7.0
+    container_name: clean-pro-auth-mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - auth-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - auth-network
+
+  auth-rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: clean-pro-auth-rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - auth-network
+
+volumes:
+  auth-mongo-data:
+    name: clean-pro-auth-mongo-data
+
+networks:
+  auth-network:
+    name: clean-pro-auth-network
+    driver: bridge
