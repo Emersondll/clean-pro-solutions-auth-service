@@ -1,0 +1,49 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: auth-mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - auth-net
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: auth-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - auth-net
+
+  service-registry:
+    build:
+      context: ../clean-pro-solutions-service-registry
+      dockerfile: Dockerfile
+    container_name: auth-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - auth-net
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/auth_db
+      RABBITMQ_HOST: rabbitmq
+      EUREKA_SERVER_URL: http://service-registry:8761/eureka
+    depends_on:
+      - mongo
+      - rabbitmq
+      - service-registry
+    networks:
+      - auth-net
+
+networks:
+  auth-net:
+    driver: bridge

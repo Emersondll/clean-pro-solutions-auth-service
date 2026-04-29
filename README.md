@@ -1,43 +1,36 @@
-﻿# clean-pro-solutions-auth-service
+# Clean Pro Solutions - Auth Service 🔐
 
-Gerenciamento de autenticaÃ§Ã£o, usuÃ¡rios e seguranÃ§a via JWT.
+## 🎯 Papel no Ecossistema
+O **Auth Service** é o guardião da segurança da plataforma. Ele é responsável por:
+- Autenticação de usuários (Clientes e Profissionais).
+- Geração e validação de tokens JWT.
+- Gerenciamento de permissões e segurança de acesso.
+- Comunicação com o `user-service` para verificação de credenciais.
 
-## ðŸš€ Tecnologias
-- **Java 21**
-- **Spring Boot 3.3.4**
-- **Spring Cloud (Eureka, OpenFeign, Config)**
-- **MongoDB** (PersistÃªncia de dados)
-- **RabbitMQ** (Mensageria assÃ­ncrona)
-- **JaCoCo** (RelatÃ³rios de cobertura)
-- **SpringDoc OpenAPI** (DocumentaÃ§Ã£o Swagger)
+Este serviço é fundamental para garantir que apenas usuários autorizados acessem os recursos sensíveis do ecossistema.
 
-## ðŸ“Š Qualidade e Testes
-Este projeto possui uma regra de integridade de cÃ³digo rigorosa:
-- **Cobertura MÃ­nima**: 80% de instruÃ§Ãµes cobertas (MandatÃ³rio).
-- **Enforcement**: O build falha automaticamente via plugin JaCoCo na fase de erify caso a cobertura seja inferior ao limite.
+## 🚀 Tecnologias
+- **Java 21** & **Spring Boot 3.3.4**
+- **Spring Security** & **JWT**
+- **MongoDB** (Persistência de credenciais e tokens)
+- **RabbitMQ** (Eventos de login/logout e auditoria)
+- **Netflix Eureka** (Service Discovery)
 
-## ðŸ› ï¸ Como rodar
+## 🛠️ Como Executar
 
-### PrÃ©-requisitos
-- Docker e Docker Compose instalados.
-- JDK 21 instalado localmente (opcional se usar Docker).
+### 1. Execução Isolada (Individual)
+Para rodar apenas este serviço e suas dependências mínimas (Mongo, RabbitMQ, Eureka):
+```bash
+docker-compose up -d --build
+```
+O serviço estará disponível em `http://localhost:8081`.
 
-### Via Maven (Local)
-`ash
-mvn clean verify
-`
+### 2. Execução Integrada
+Este serviço é orquestrado pelo projeto principal [Clean Pro Platform](../README.md). Para rodar no contexto completo, utilize o docker-compose da raiz.
 
-### Via Docker
-`ash
-docker build -t clean-pro-solutions-auth-service .
-`
-
-## ðŸ—ï¸ Arquitetura
-O serviÃ§o segue os princÃ­pios de **Clean Architecture** e **Domain-Driven Design (DDD)**, com as seguintes camadas:
-- **Controller**: Porta de entrada para requisiÃ§Ãµes REST.
-- **Service**: Regras de negÃ³cio e orquestraÃ§Ã£o.
-- **Repository**: PersistÃªncia desacoplada via Spring Data.
-- **Document/Entity**: Modelagem do domÃ­nio.
+## 🧪 Qualidade
+- **Cobertura de Testes**: Mínimo de 80% (JaCoCo).
+- **Build**: `mvn clean verify` valida a cobertura e os testes unitários.
 
 ---
-Â© 2026 Clean Pro Solutions - Todos os direitos reservados.
+© 2026 Clean Pro Solutions - Desenvolvido por Emerson Lima.
